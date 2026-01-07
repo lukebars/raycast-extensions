@@ -1,6 +1,6 @@
 # Toggl Track Changelog
 
-## [Bug Fixes] - 2026-01-07
+## [Bug Fixes] - {PR_MERGE_DATE}
 
 - Use cache for MenuBar refresh requests so it stays under API limits. Cache time is fully configurable via settings.
 
