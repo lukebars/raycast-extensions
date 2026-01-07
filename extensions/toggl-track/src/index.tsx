@@ -2,7 +2,7 @@ import { Action, ActionPanel, Alert, Color, confirmAlert, Icon, List } from "@ra
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 
-import { removeTimeEntry } from "@/api/timeEntries";
+import { removeTimeEntry, invalidateTimeEntriesCache } from "@/api/timeEntries";
 import TimeEntryForm from "@/components/CreateTimeEntryForm";
 import RunningTimeEntry from "@/components/RunningTimeEntry";
 import UpdateTimeEntryForm from "@/components/UpdateTimeEntryForm";
@@ -131,6 +131,7 @@ function ListView() {
                                 noun: "Time Entry",
                                 verb: Verb.Delete,
                                 action: async () => {
+                                  invalidateTimeEntriesCache();
                                   await mutateTimeEntries(removeTimeEntry(timeEntry.workspace_id, timeEntry.id));
                                 },
                               });

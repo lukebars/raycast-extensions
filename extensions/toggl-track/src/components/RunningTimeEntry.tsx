@@ -1,7 +1,7 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import dayjs from "dayjs";
 
-import { TimeEntry, TimeEntryMetaData, updateTimeEntry } from "@/api";
+import { TimeEntry, TimeEntryMetaData, updateTimeEntry, invalidateTimeEntriesCache } from "@/api";
 import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { useTimeEntryActions } from "@/hooks/useTimeEntryActions";
 
@@ -54,6 +54,7 @@ function RunningTimeEntry({
                   await updateTimeEntry(runningTimeEntry.workspace_id, runningTimeEntry.id, {
                     start: date.toISOString(),
                   });
+                  invalidateTimeEntriesCache();
                   revalidateRunningTimeEntry();
                   setCurrentTime(dayjs());
                 }

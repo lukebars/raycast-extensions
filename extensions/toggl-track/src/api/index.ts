@@ -27,6 +27,7 @@ export {
   getRunningTimeEntry,
   updateTimeEntry,
   removeTimeEntry,
+  invalidateTimeEntriesCache,
   type TimeEntry,
   type TimeEntryMetaData,
   type UpdateTimeEntryParams,

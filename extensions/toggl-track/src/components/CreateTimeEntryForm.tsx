@@ -12,7 +12,16 @@ import {
 import { useCachedState, showFailureToast } from "@raycast/utils";
 import { useMemo, useState } from "react";
 
-import { Client, Project, Task, TimeEntry, TimeEntryMetaData, createTimeEntry, createTask } from "@/api";
+import {
+  Client,
+  Project,
+  Task,
+  TimeEntry,
+  TimeEntryMetaData,
+  createTimeEntry,
+  createTask,
+  invalidateTimeEntriesCache,
+} from "@/api";
 import { showClientsInForm, showProjectsInForm, showTasksInForm, showTagsInForm } from "@/helpers/preferences";
 import { useClients, useMe, useProjects, useTags, useTasks, useWorkspaces } from "@/hooks";
 
@@ -77,6 +86,7 @@ function CreateTimeEntryForm({
 
       navigation.pop();
 
+      invalidateTimeEntriesCache();
       revalidateRunningTimeEntry();
       revalidateTimeEntries();
       await clearSearchBar();

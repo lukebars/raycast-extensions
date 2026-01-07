@@ -1,5 +1,6 @@
 import { get, post, patch, put, remove } from "@/api/togglClient";
 import type { ToggleItem } from "@/api/types";
+import { cacheHelper } from "@/helpers/cache-helper";
 
 export async function getMyTimeEntries<Meta extends boolean = false>({
   startDate,
@@ -10,14 +11,21 @@ export async function getMyTimeEntries<Meta extends boolean = false>({
   endDate: Date;
   includeMetadata?: Meta;
 }): Promise<(Meta extends false ? TimeEntry : TimeEntry & TimeEntryMetaData)[]> {
-  const timeEntries = await get<(Meta extends false ? TimeEntry : TimeEntry & TimeEntryMetaData)[]>(
-    `/me/time_entries?start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}&meta=${includeMetadata ?? false}`,
-  );
-  return timeEntries.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+  return cacheHelper.getOrSet("timeEntries", async () => {
+    const timeEntries = await get<(Meta extends false ? TimeEntry : TimeEntry & TimeEntryMetaData)[]>(
+      `/me/time_entries?start_date=${startDate.toISOString()}&end_date=${endDate.toISOString()}&meta=${includeMetadata ?? false}`,
+    );
+    return timeEntries.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+  });
 }
 
 export function getRunningTimeEntry() {
-  return get<TimeEntry | null>("/me/time_entries/current");
+  return cacheHelper.getOrSet("runningTimeEntry", () => get<TimeEntry | null>("/me/time_entries/current"));
+}
+
+export function invalidateTimeEntriesCache() {
+  cacheHelper.remove("timeEntries");
+  cacheHelper.remove("runningTimeEntry");
 }
 
 type CreateTimeEntryParameters = {

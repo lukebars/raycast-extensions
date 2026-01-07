@@ -1,6 +1,6 @@
 import { showToast, Toast, clearSearchBar } from "@raycast/api";
 
-import { createTimeEntry, stopTimeEntry, TimeEntry } from "@/api";
+import { createTimeEntry, stopTimeEntry, invalidateTimeEntriesCache, TimeEntry } from "@/api";
 
 export function useTimeEntryActions(revalidateRunningTimeEntry: () => void, revalidateTimeEntries: () => void) {
   async function resumeTimeEntry(timeEntry: TimeEntry) {
@@ -13,6 +13,7 @@ export function useTimeEntryActions(revalidateRunningTimeEntry: () => void, reva
         tags: timeEntry.tags,
         billable: timeEntry.billable,
       });
+      invalidateTimeEntriesCache();
       revalidateRunningTimeEntry();
       await showToast(Toast.Style.Success, "Time entry resumed");
       await clearSearchBar({ forceScrollToTop: true });
@@ -26,6 +27,7 @@ export function useTimeEntryActions(revalidateRunningTimeEntry: () => void, reva
     try {
       await stopTimeEntry({ id: entry.id, workspaceId: entry.workspace_id });
       await showToast(Toast.Style.Success, `Stopped time entry`);
+      invalidateTimeEntriesCache();
       revalidateRunningTimeEntry();
       revalidateTimeEntries();
     } catch {

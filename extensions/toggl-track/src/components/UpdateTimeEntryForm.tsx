@@ -2,7 +2,16 @@ import { Action, ActionPanel, Form, Icon, Toast, showToast, useNavigation, confi
 import { useCachedState, showFailureToast } from "@raycast/utils";
 import { useMemo, useState } from "react";
 
-import { Client, Project, Task, TimeEntry, TimeEntryMetaData, updateTimeEntry, createTask } from "@/api";
+import {
+  Client,
+  Project,
+  Task,
+  TimeEntry,
+  TimeEntryMetaData,
+  updateTimeEntry,
+  createTask,
+  invalidateTimeEntriesCache,
+} from "@/api";
 import { showClientsInForm, showProjectsInForm, showTasksInForm, showTagsInForm } from "@/helpers/preferences";
 import { useClients, useMe, useProjects, useTags, useTasks, useWorkspaces } from "@/hooks";
 
@@ -59,6 +68,7 @@ function UpdateTimeEntryForm({ timeEntry, revalidateTimeEntries }: UpdateTimeEnt
 
       await showToast(Toast.Style.Success, "Updated time entry");
       navigation.pop();
+      invalidateTimeEntriesCache();
       revalidateTimeEntries();
     } catch {
       await showToast(Toast.Style.Failure, "Failed to update time entry");

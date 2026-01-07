@@ -163,13 +163,13 @@
       "default": "14"
     },
     {
-      "description": "The API responses cache time-to-live in seconds.",
+      "description": "How long to cache API responses (in seconds). Toggl's free tier allows 30 requests/hour. Set to 240+ to stay within limits with menu bar enabled.",
       "name": "cacheTtl",
-      "placeholder": "Enter cache TTL in seconds (default: 0)",
+      "placeholder": "Enter cache TTL in seconds (default: 240)",
       "required": false,
       "title": "Cache TTL",
       "type": "textfield",
-      "default": "0"
+      "default": "240"
     }
   ],
   "dependencies": {

@@ -1,6 +1,6 @@
 import { Action, ActionPanel, Alert, Color, Icon, List, confirmAlert } from "@raycast/api";
 
-import { removeTimeEntry } from "@/api";
+import { removeTimeEntry, invalidateTimeEntriesCache } from "@/api";
 import { ExtensionContextProvider } from "@/context/ExtensionContext";
 import { formatSeconds } from "@/helpers/formatSeconds";
 import { Verb, withToast } from "@/helpers/withToast";
@@ -70,6 +70,7 @@ export function TimeEntriesListView() {
                                 noun: "Time Entry",
                                 verb: Verb.Delete,
                                 action: async () => {
+                                  invalidateTimeEntriesCache();
                                   await mutateTimeEntries(removeTimeEntry(timeEntry.workspace_id, timeEntry.id));
                                 },
                               });
